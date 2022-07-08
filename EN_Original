@@ -1,0 +1,88 @@
+%%[
+SET @shop_contact_owner_first_name = ProperCase(Replace(Replace([shop_contact_owner_first_name],"&gt;","&gt;"),"&lt;","&lt;"))
+SET @shop_id = [shop_id]
+SET @shop_contact_permanent_domain = [shop_contact_permanent_domain]
+SET @admin_page = Concat("https://",@shop_contact_permanent_domain,"/admin")
+SET @shop_contact_owner_email = [shop_contact_owner_email]
+SET @shop_contact_shop_name = [shop_contact_shop_name]
+SET @contact_key = [contact_key]
+SET @shop_conversion_raw_signup_page = [shop_conversion_raw_signup_page]
+SET @shop_contact_owner_locale = [shop_contact_owner_locale]
+
+ SET @subject = "Say hello to your store"
+
+
+/* Set preheader here */
+SET @preheader = "Your free trial starts today. Congratulations on starting your journey with Shopify. We're excited you’re here and can’t wait to help you get started on your entrepreneurial journey. Here's what's next."
+
+/* Set analytics here */
+SET @GA_params = "utm_source=exacttarget&amp;utm_medium=email&amp;utm_campaign=onboarding&amp;utm_content=en_1_wel_aff"
+/* Show 'Manage Preferences' in footer, set to 1 to show */
+SET @show_pref = 1 
+/* Show 'Log in' link in header, set to 1 to show */
+SET @show_login = 1
+/* WELCOME LP BLOCK SOLUTION - WIP */
+SET @url_regex = "^(http[s]?:\/\/?[^:\/\s]+[^\/]*?\/\w+\.)*([^#?\s]+)(\?([^#]*))?(#(.*))?$"
+SET @clean_url = RegExMatch(@shop_conversion_raw_signup_page, @url_regex, 2) 
+SET @url_last_char = Substring(@clean_url, Subtract(Length(@clean_url), 0), 1)
+IF @url_last_char == "/" THEN
+ SET @clean_url = Substring(@clean_url, 1, Subtract(Length(@clean_url),1))
+ENDIF
+IF Length(Lookup("Affiliates_Welcome_Content", "shop_conversion_raw_signup_page", "shop_conversion_raw_signup_page", @clean_url)) > 0 THEN
+ SET @show_block = 1
+
+SET @use_subject = Lookup("Affiliates_Welcome_Content", "use_subject", "shop_conversion_raw_signup_page", @clean_url)
+
+IF @use_subject == 1 THEN
+ SET @subject = Lookup("Affiliates_Welcome_Content", "subject", "shop_conversion_raw_signup_page", @clean_url)
+ENDIF
+
+
+SET @image = Lookup("Affiliates_Welcome_Content", "image", "shop_conversion_raw_signup_page", @clean_url)
+SET @image_url = Lookup("Affiliates_Welcome_Content", "image_url", "shop_conversion_raw_signup_page", @clean_url)
+SET @title = Lookup("Affiliates_Welcome_Content", "title", "shop_conversion_raw_signup_page", @clean_url)
+SET @paragraph_1 = Lookup("Affiliates_Welcome_Content", "paragraph_1", "shop_conversion_raw_signup_page", @clean_url)
+SET @paragraph_2 = Lookup("Affiliates_Welcome_Content", "paragraph_2", "shop_conversion_raw_signup_page", @clean_url)
+SET @paragraph_3 = Lookup("Affiliates_Welcome_Content", "paragraph_3", "shop_conversion_raw_signup_page", @clean_url)
+SET @cta_text = Lookup("Affiliates_Welcome_Content", "cta_text", "shop_conversion_raw_signup_page", @clean_url)
+SET @cta_url = Lookup("Affiliates_Welcome_Content", "cta_url", "shop_conversion_raw_signup_page", @clean_url)
+SET @sign_off = Lookup("Affiliates_Welcome_Content", "sign_off", "shop_conversion_raw_signup_page", @clean_url)
+ENDIF
+/* POD */
+SET @signup_page_1 = "free-trial/pod"
+SET @signup_page_2 = "tshirt-business"
+SET @signup_page_3 = "courses/print-on-demand/webinar"
+IF IndexOf(@shop_conversion_raw_signup_page,@signup_page_1) > 0 THEN
+ SET @pod = 1
+ELSEIF IndexOf(@shop_conversion_raw_signup_page,@signup_page_2) > 0 THEN
+ SET @pod = 1
+ELSEIF IndexOf(@shop_conversion_raw_signup_page,@signup_page_3) > 0 THEN
+ SET @pod = 1
+ELSE
+ SET @pod = 0
+ENDIF
+/* CBD */
+IF @subscription_signup_code == 'CBD30days' THEN
+ SET @cbd = 1
+ELSE
+ SET @cbd = 0
+ENDIF
+
+
+
+IF (Length(RegExMatch(@shop_conversion_raw_signup_page, "[\/=]makers", 0, "IgnoreCase")) > 0) THEN
+ SET @makers = 1
+ELSE
+ SET @makers = 0
+ENDIF
+
+
+
+
+/*UpsertDE("Trial_Onboarding_2019_Journey_Log",1,"contact_key",@contact_key,"email_name",emailName_)*/
+]%%
+<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+  %%=v(@preheader)=%%
+</div>
+<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">  &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+</div>
