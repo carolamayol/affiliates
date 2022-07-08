@@ -1,0 +1,116 @@
+
+%%[
+
+SET @shop_contact_owner_first_name = ProperCase(Replace(Replace([shop_contact_owner_first_name],">","&gt;"),"<","&lt;"))
+SET @shop_id = [shop_id]
+
+SET @shop_contact_permanent_domain = [shop_contact_permanent_domain]
+SET @admin_page = Concat('https://',@shop_contact_permanent_domain,'/admin')
+SET @shop_contact_owner_email = [shop_contact_owner_email]
+SET @shop_contact_shop_name = [shop_contact_shop_name]
+SET @shop_conversion_ten_field_completed_at = [shop_conversion_ten_field_completed_at]
+SET @contact_key = [contact_key]
+SET @shop_conversion_raw_signup_page = [shop_conversion_raw_signup_page]
+
+SET @shop_contact_owner_locale = [shop_contact_owner_locale]
+
+/* Set analytics here */
+SET @GA_params = "utm_source=exacttarget&utm_medium=email&utm_campaign=onboarding&utm_content=int_1_wel_aff"
+
+
+/* Show 'Manage Preferences' in footer, set to 1 to show */
+SET @show_pref = 1 
+/* Show 'Log in' link in header, set to 1 to show */
+SET @show_login = 1
+
+/* Set language for footer */
+SET @shop_contact_owner_locale = [shop_contact_owner_locale]
+SET @lang = Substring(@shop_contact_owner_locale,1,2)
+
+IF @lang == "pt" THEN
+ IF @shop_contact_owner_locale == "pt-BR" THEN
+  SET @lang = "pt-BR"
+ ELSE
+  SET @lang = "pt-PT"
+ ENDIF
+ELSEIF @lang == "zh" or @lang == "ha" THEN
+ IF @shop_contact_owner_locale == "zh-CN" OR @shop_contact_owner_locale == "hans" THEN
+  SET @lang = "zh-CN"
+ ELSE
+  SET @lang = "zh-TW"
+ ENDIF
+ENDIF
+
+IF @lang != "fr" 
+AND @lang != "it"
+AND @lang != "es"
+AND @lang != "ja"
+AND @lang != "nl"
+AND @lang != "pt-BR"
+AND @lang != "zh-CN"
+AND @lang != "zh-TW"
+THEN
+ RaiseError("no valid language",1)
+ENDIF
+
+
+/* WELCOME LP BLOCK SOLUTION - WIP */
+
+SET @url_regex = "^(http[s]?:\/\/?[^:\/\s]+[^\/]*?\/\w+\.)*([^#?\s]+)(\?([^#]*))?(#(.*))?$"
+SET @clean_url = RegExMatch(@shop_conversion_raw_signup_page, @url_regex, 2) 
+SET @url_last_char = Substring(@clean_url, Subtract(Length(@clean_url), 0), 1)
+
+IF @url_last_char == "/" THEN
+ SET @clean_url = Substring(@clean_url, 1, Subtract(Length(@clean_url),1))
+ENDIF
+
+IF Length(Lookup("Affiliates_Welcome_Content_INT", "shop_conversion_raw_signup_page", "shop_conversion_raw_signup_page", @clean_url)) > 0 THEN
+
+SET @show_block = 1
+
+SET @use_subject = Lookup("Affiliates_Welcome_Content_INT", "use_subject", "shop_conversion_raw_signup_page", @clean_url)
+
+IF @use_subject == 1 THEN
+ SET @subject = Lookup("Affiliates_Welcome_Content_INT", "subject", "shop_conversion_raw_signup_page", @clean_url)
+ENDIF
+
+SET @image = Lookup("Affiliates_Welcome_Content_INT", "image", "shop_conversion_raw_signup_page", @clean_url)
+SET @image_url = Lookup("Affiliates_Welcome_Content_INT", "image_url", "shop_conversion_raw_signup_page", @clean_url)
+SET @title = Lookup("Affiliates_Welcome_Content_INT", "title", "shop_conversion_raw_signup_page", @clean_url)
+SET @paragraph_1 = Lookup("Affiliates_Welcome_Content_INT", "paragraph_1", "shop_conversion_raw_signup_page", @clean_url)
+SET @paragraph_2 = Lookup("Affiliates_Welcome_Content_INT", "paragraph_2", "shop_conversion_raw_signup_page", @clean_url)
+SET @paragraph_3 = Lookup("Affiliates_Welcome_Content_INT", "paragraph_3", "shop_conversion_raw_signup_page", @clean_url)
+SET @cta_text = Lookup("Affiliates_Welcome_Content_INT", "cta_text", "shop_conversion_raw_signup_page", @clean_url)
+SET @cta_url = Lookup("Affiliates_Welcome_Content_INT", "cta_url", "shop_conversion_raw_signup_page", @clean_url)
+SET @sign_off = Lookup("Affiliates_Welcome_Content_INT", "sign_off", "shop_conversion_raw_signup_page", @clean_url)
+
+ENDIF
+
+
+
+
+
+SET @signup_page_1 = "shopify.fr/essai-gratuit/yomi"
+SET @signup_page_2 = "shopify.com.br/avaliacao-gratuita/negocio-em-21-dias" 
+SET @signup_page_3 = "shopify.com.br/avaliacao-gratuita/gabrielsilva"
+
+IF IndexOf(@shop_conversion_raw_signup_page,@signup_page_1) > 0 THEN
+ SET @affiliate = 1
+ELSEIF IndexOf(@shop_conversion_raw_signup_page,@signup_page_2) > 0 THEN
+ SET @affiliate = 1
+ ELSEIF IndexOf(@shop_conversion_raw_signup_page,@signup_page_3) > 0 THEN
+ SET @affiliate = 1
+ELSE
+ SET @affiliate = 0
+ENDIF
+]%%
+
+
+<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+  %%=v(@preheader)=%%
+</div>
+
+<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+  &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+</div>
+
